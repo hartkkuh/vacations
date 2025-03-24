@@ -18,9 +18,11 @@ app.config['JWT_ALGORITHM'] = 'HS256'
 
 jwt = JWTManager(app)
 
-@app.route("/", methods=["GET"])
-def home():
-    return "helo"
+@app.route('/')
+@app.route('/<path:path>')
+def serve(path='index.html'):
+    return send_from_directory(app.static_folder, path)
+
     
 app.register_blueprint(users_bp)
 app.register_blueprint(countries_bp)
