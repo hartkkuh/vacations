@@ -9,7 +9,7 @@ from datetime import timedelta
 from flask_cors import CORS
 import os
 
-app = Flask(__name__, static_folder="static", static_url_path="")
+app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 app.config["JWT_SECRET_KEY"] = os.getenv('JWT')
@@ -18,13 +18,9 @@ app.config['JWT_ALGORITHM'] = 'HS256'
 
 jwt = JWTManager(app)
 
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def serve_frontend(path):
-    # if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-    #     return send_from_directory(app.static_folder, path)
-    # else:
-        return send_from_directory(app.static_folder, "index.html")
+@app.route("/", methods=["GET"])
+def home():
+    return "helo"
     
 app.register_blueprint(users_bp)
 app.register_blueprint(countries_bp)
