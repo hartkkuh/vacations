@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, jsonify
 from flask_jwt_extended import JWTManager
 from routing.users_routing import users_bp
 from routing.countries_routing import countries_bp
@@ -18,14 +18,14 @@ app.config['JWT_ALGORITHM'] = 'HS256'
 
 jwt = JWTManager(app)
 
-@app.route('/')
-def serve():
-    return send_from_directory(app.static_folder, 'index.html')
-
-@app.route('/<path:filename>')
-def static_files(filename):
-    return send_from_directory(app.static_folder, filename)
-
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_frontend(path):
+    # if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+    #     return send_from_directory(app.static_folder, path)
+    # else:
+        return send_from_directory(app.static_folder, "index.html")
+    
 app.register_blueprint(users_bp)
 app.register_blueprint(countries_bp)
 app.register_blueprint(roles_bp)
