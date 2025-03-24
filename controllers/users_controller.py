@@ -43,7 +43,6 @@ def login_user(data):
             return jsonify({"message": "user not found"}), 401
             
         if not bcrypt.check_password_hash(user[4], password):
-            print(bcrypt.check_password_hash(user[4]))
             return jsonify({"message": "password is not correct"}), 401
         access_token = create_access_token(identity=str(user[0]), additional_claims={"is_admin": user[6]}, expires_delta=timedelta(days=7))
         return jsonify({"access_token": access_token}), 200
